@@ -30,4 +30,25 @@ document.addEventListener('DOMContentLoaded', () => {
             header.classList.remove('scrolled');
         }
     });
+    
+    // Easter Egg: Confetti on clicking headshot 5 times
+    const easterEggTrigger = document.getElementById('easter-egg-trigger');
+    if (easterEggTrigger) {
+        let clickCount = 0;
+        easterEggTrigger.addEventListener('click', () => {
+            clickCount++;
+            easterEggTrigger.style.transform = 'scale(0.95)';
+            setTimeout(() => easterEggTrigger.style.transform = 'scale(1)', 100);
+            
+            if (clickCount === 5) {
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#2b6cb0', '#ffffff', '#ffd700']
+                });
+                clickCount = 0; // Reset
+            }
+        });
+    }
 });

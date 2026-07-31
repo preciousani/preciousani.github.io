@@ -85,7 +85,7 @@
                     <a href="#work" class="btn btn-primary">Explore My Work ↓</a>
                 </div>
                 <div class="hero-image">
-                    <img src="assets/images/headshot.jpg" alt="Precious Oluwafemi Sani">
+                    <img id="easter-egg-trigger" src="assets/images/headshot.jpg" alt="Precious Oluwafemi Sani" title="Click 5 times for a surprise!" style="cursor: pointer; transition: transform 0.1s;">
                 </div>
             </div>
         </section>
@@ -246,9 +246,10 @@
             <div class="container">
                 <h2>Community & Events</h2>
                 
-                <div class="grid grid-cols-3 gap-6" style="margin-bottom: var(--space-8);">
-                    <img src="assets/images/bluehat-media-wall.jpg" alt="BlueHat 2026 Media Wall" style="border-radius: var(--radius-md); box-shadow: var(--shadow-sm); width: 100%; aspect-ratio: 4/3; object-fit: cover;">
-                    <img src="assets/images/power-platform-friends.jpg" alt="Power Platform Tour with friends" style="border-radius: var(--radius-md); box-shadow: var(--shadow-sm); width: 100%; aspect-ratio: 4/3; object-fit: cover;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); margin-bottom: var(--space-8);">
+                    <img src="assets/images/bluehat-selfie.jpg" alt="BlueHat 2026 Selfie" style="border-radius: var(--radius-md); box-shadow: var(--shadow-sm); width: 100%; aspect-ratio: 4/3; object-fit: cover;">
+                    <img src="assets/images/power-platform-friends.jpg" alt="Power Platform Tour with friends" style="border-radius: var(--radius-md); box-shadow: var(--shadow-sm); width: 100%; aspect-ratio: 4/3; object-fit: cover; object-position: bottom;">
+                    <img src="assets/images/power-platform-tour.jpg" alt="Power Platform Tour group" style="border-radius: var(--radius-md); box-shadow: var(--shadow-sm); width: 100%; aspect-ratio: 4/3; object-fit: cover; object-position: center;">
                     <img src="assets/images/droidomania.jpg" alt="Droidomania 2017" style="border-radius: var(--radius-md); box-shadow: var(--shadow-sm); width: 100%; aspect-ratio: 4/3; object-fit: cover;">
                 </div>
                 
@@ -324,6 +325,7 @@
         </section>
     </main>
     
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
