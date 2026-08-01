@@ -97,6 +97,8 @@ section:nth-child(even) {
 .site-header.menu-open {
     backdrop-filter: none;
     background-color: var(--color-bg);
+    height: 100vh;
+    overflow-y: auto;
 }
 
 .nav-container {
