@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navLinks.classList.toggle('mobile-open');
+            header.classList.toggle('menu-open');
             hamburger.setAttribute('aria-expanded', 
                 hamburger.classList.contains('active'));
             // Prevent body scroll when menu is open
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('active');
                 navLinks.classList.remove('mobile-open');
+                header.classList.remove('menu-open');
                 hamburger.setAttribute('aria-expanded', 'false');
                 document.body.style.overflow = '';
             });

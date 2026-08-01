@@ -94,6 +94,11 @@ section:nth-child(even) {
     }
 }
 
+.site-header.menu-open {
+    backdrop-filter: none;
+    background-color: var(--color-bg);
+}
+
 .nav-container {
     display: flex;
     justify-content: space-between;
