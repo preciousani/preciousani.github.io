@@ -31,6 +31,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    // Mobile hamburger menu toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('mobile-open');
+            hamburger.setAttribute('aria-expanded', 
+                hamburger.classList.contains('active'));
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = 
+                navLinks.classList.contains('mobile-open') ? 'hidden' : '';
+        });
+        
+        // Close menu when a nav link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('mobile-open');
+                hamburger.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            });
+        });
+    }
+    
     // Easter Egg: Confetti on clicking headshot 5 times
     const easterEggTrigger = document.getElementById('easter-egg-trigger');
     if (easterEggTrigger) {
