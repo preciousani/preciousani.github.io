@@ -97,8 +97,18 @@ section:nth-child(even) {
 .site-header.menu-open {
     backdrop-filter: none;
     background-color: var(--color-bg);
-    height: 100vh;
-    overflow-y: auto;
+}
+
+/* Dim overlay when menu is open */
+.site-header.menu-open::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: -1;
 }
 
 .nav-container {
@@ -161,30 +171,38 @@ section:nth-child(even) {
     }
 }
 
-/* Mobile Nav Overlay */
+/* Mobile Nav Drawer */
 .nav-links.mobile-open {
     display: flex;
     flex-direction: column;
     position: fixed;
     top: 0;
-    left: 0;
     right: 0;
     bottom: 0;
+    width: 250px;
     background-color: var(--color-bg);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-8);
-    animation: fadeIn 0.2s ease;
+    z-index: 999;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 80px var(--space-6) var(--space-6);
+    gap: var(--space-6);
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    border-left: 1px solid var(--color-border);
+    animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .nav-links.mobile-open a {
-    font-size: var(--text-2xl);
+    font-size: var(--text-lg);
+    color: var(--color-text); /* Forces correct text color in dark mode */
+    text-decoration: none;
+    width: 100%;
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+@keyframes slideInRight {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
 }
 
 /* Hero Section */
