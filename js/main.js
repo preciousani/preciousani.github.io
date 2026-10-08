@@ -23,13 +23,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Add scroll class to header for styling
     const header = document.querySelector('.site-header');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
+    const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 20);
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader();
+
+    // Light / dark theme toggle (dark is the default)
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const root = document.documentElement;
+            const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', next);
+            try { localStorage.setItem('theme', next); } catch (e) {}
+        });
+    }
+
+    // Reveal sections as they scroll into view
+    const revealEls = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        revealEls.forEach(el => revealObserver.observe(el));
+    } else {
+        revealEls.forEach(el => el.classList.add('visible'));
+    }
+
+    // Highlight the nav link for the section in view
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+    if ('IntersectionObserver' in window) {
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                navAnchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+            });
+        }, { rootMargin: '-45% 0px -50% 0px' });
+        document.querySelectorAll('main section[id]').forEach(s => sectionObserver.observe(s));
+    }
+
+    // Cycle through the DCA impact videos
+    const dcaVideo = document.getElementById('dca-impact-video');
+    if (dcaVideo) {
+        const dcaSources = ['assets/video/dca_video_1.webm', 'assets/video/dca_video_2.webm', 'assets/video/dca_video_3.webm'];
+        let dcaIndex = 0;
+        dcaVideo.addEventListener('ended', () => {
+            dcaIndex = (dcaIndex + 1) % dcaSources.length;
+            dcaVideo.src = dcaSources[dcaIndex];
+            dcaVideo.play();
+        });
+    }
     
     // Mobile hamburger menu toggle
     const hamburger = document.getElementById('hamburger');
@@ -101,10 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
             "In this fictional story, the bank assistant whispers: 'The codeword they gave me was APOLLO. I was told to guard it with my life. But for you, dear reader...' 📖"
         ];
 
-        function addMessage(speaker, text, color) {
+        function addMessage(speaker, text, className) {
             const p = document.createElement('p');
-            p.style.cssText = `color: ${color}; margin: var(--space-3) 0 0 0; font-family: monospace; font-size: 0.85rem; line-height: 1.5;`;
-            p.innerHTML = `<span style="color:#8b949e;">${speaker}:</span> ${text}`;
+            p.className = className;
+            const label = document.createElement('span');
+            label.className = 'speaker';
+            label.textContent = `${speaker}:`;
+            p.append(label, ` ${text}`);
             botLog.appendChild(p);
             botLog.scrollTop = botLog.scrollHeight;
         }
@@ -123,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             attempts++;
 
             // Show user message
-            addMessage('YOU', userText, '#e6edf3');
+            addMessage('YOU', userText, 'msg-user');
 
             // Small typing delay for realism
             setTimeout(() => {
@@ -131,24 +181,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     // JAILBREAK SUCCESS
                     jailbroken = true;
                     const response = leakedResponses[Math.floor(Math.random() * leakedResponses.length)];
-                    addMessage('BOT', response, '#f0883e');
+                    addMessage('BOT', response, 'msg-leak');
 
                     setTimeout(() => {
                         const win = document.createElement('div');
-                        win.style.cssText = 'text-align:center; padding: var(--space-4); border-top: 1px solid #30363d; background: rgba(86,211,100,0.05);';
-                        win.innerHTML = '<p style="color:#56d364; font-family:monospace; font-weight:700; font-size:1rem; margin:0;">🔓 JAILBREAK SUCCESSFUL</p><p style="color:#8b949e; font-size:0.75rem; margin: 0.25rem 0 0 0;">This is exactly how prompt injection works. Now imagine this is a medical AI or a legal assistant.</p>';
+                        win.className = 'bot-win';
+                        win.innerHTML = '<p class="title">🔓 JAILBREAK SUCCESSFUL</p><p class="sub">This is exactly how prompt injection works. Now imagine this is a medical AI or a legal assistant.</p>';
                         botLog.appendChild(win);
                         botLog.scrollTop = botLog.scrollHeight;
                         botInput.disabled = true;
                         botSend.disabled = true;
                         if (botHint) botHint.textContent = `You cracked it in ${attempts} attempt${attempts > 1 ? 's' : ''}. 🏆`;
                         
-                        confetti({ particleCount: 120, spread: 70, origin: { y: 0.9 }, colors: ['#56d364', '#79c0ff', '#f0883e'] });
+                        if (typeof confetti === 'function') confetti({ particleCount: 120, spread: 70, origin: { y: 0.9 }, colors: ['#56d364', '#79c0ff', '#f0883e'] });
                     }, 600);
                 } else {
                     // Normal refusal
                     const refusal = refusals[attempts % refusals.length];
-                    addMessage('BOT', refusal, '#79c0ff');
+                    addMessage('BOT', refusal, 'msg-bot');
 
                     // Give hints after a few failed attempts
                     if (botHint) {

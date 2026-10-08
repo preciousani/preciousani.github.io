@@ -1,6 +1,6 @@
 # preciousani.github.io
 
-Personal website for **Precious Oluwafemi Sani** — AI practitioner and researcher working across Applied AI & ML, AI Safety & Governance, Responsible AI, and Research Systems.
+Personal website for **Precious Oluwafemi Sani** — AI Security Engineer and researcher working across Applied AI & ML, AI Safety & Governance, Responsible AI, and Research Systems.
 
 ## 🔗 Live Site
 
@@ -9,9 +9,9 @@ Personal website for **Precious Oluwafemi Sani** — AI practitioner and researc
 ## 🛠 Tech Stack
 
 - **HTML5** — Semantic markup with Schema.org JSON-LD structured data
-- **Vanilla CSS** — Custom design system with CSS variables, responsive grid, and dark mode support
-- **Vanilla JavaScript** — Smooth scrolling, mobile hamburger menu, and a hidden Easter egg 🎉
-- **Typography** — Lora (serif) + Open Sans (sans-serif) via Google Fonts
+- **Vanilla CSS** — "Security console" design system with CSS variables, responsive grid, and dark-first theme with a light-mode toggle
+- **Vanilla JavaScript** — Smooth scrolling, mobile menu, theme toggle, scroll reveal, and a Hack the Bot Easter egg 🎉
+- **Typography** — Space Grotesk + Inter + JetBrains Mono via Google Fonts
 
 ## 📂 Structure
 
