@@ -1,0 +1,12 @@
+{%- if page.is_home -%}{%- assign home = '' -%}{%- else -%}{%- assign home = '/' | relative_url -%}{%- endif -%}
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; {{ site.time | date: '%Y' }} Precious Oluwafemi Sani.</p>
+        <p class="footer-links">
+            <a href="{{ '/blog/' | relative_url }}">blog</a>
+            <a href="{{ '/feed.xml' | relative_url }}">rss</a>
+            <button type="button" class="link-button" data-cmdk-open>press <kbd data-mod-key>⌘K</kbd></button>
+            <a href="{{ home }}#hero">cd ~ ↑</a>
+        </p>
+    </div>
+</footer>

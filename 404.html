@@ -1,0 +1,26 @@
+---
+layout: default
+title: 404 — Not found
+permalink: /404.html
+---
+<section class="section-404">
+    <div class="container container-sm">
+        <div class="terminal">
+            <div class="terminal-bar">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span class="title">~/pos — zsh</span>
+            </div>
+            <div class="bot-log">
+                <p class="msg-user"><span class="speaker">$</span> curl -I <span id="missing-path">this-page</span></p>
+                <p class="msg-leak">HTTP/2 404 — resource not in scope</p>
+                <p class="msg-system"><span class="speaker">#</span> No exploit here. The page you're after doesn't exist (or moved).</p>
+            </div>
+        </div>
+        <div class="contact-actions" style="margin-top: var(--space-8);">
+            <a class="btn btn-primary" href="{{ '/' | relative_url }}">cd ~</a>
+            <a class="btn btn-outline" href="{{ '/blog/' | relative_url }}">Read the blog</a>
+            <button type="button" class="btn btn-outline" data-cmdk-open>Search <kbd data-mod-key>⌘K</kbd></button>
+        </div>
+    </div>
+</section>
+<script>document.getElementById('missing-path').textContent = window.location.pathname;</script>

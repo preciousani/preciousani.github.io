@@ -1,0 +1,67 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070b11">
+<link rel="icon" href="{{ '/favicon.svg' | relative_url }}" type="image/svg+xml">
+{% if page.is_home %}
+<title>Precious Oluwafemi Sani — AI Security Engineer | LLM Red-Teaming | AI Safety & Governance</title>
+
+<!-- SEO Meta Tags -->
+<meta name="description" content="AI Security Engineer and researcher with 5+ years across applied ML, AI safety, enterprise governance, and community leadership. I red-team LLMs, build guardrails, and research cross-lingual safety gaps.">
+<meta name="keywords" content="Precious Oluwafemi Sani, AI security engineer, LLM red teaming, prompt injection, AI safety researcher, responsible AI, machine learning, DroidPrezzo, CodewithPrecious">
+<link rel="canonical" href="{{ site.url }}/">
+
+<!-- Open Graph / Social -->
+<meta property="og:title" content="Precious Oluwafemi Sani — AI Security Engineer">
+<meta property="og:description" content="AI Security Engineer and researcher with 5+ years across applied ML, AI safety, enterprise governance, and community leadership.">
+<meta property="og:image" content="{{ site.url }}/assets/images/headshot.jpg">
+<meta property="og:url" content="{{ site.url }}">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Precious Oluwafemi Sani",
+  "alternateName": ["Precious Sani", "Femi Sani", "DroidPrezzo", "pfemis"],
+  "jobTitle": "AI Security Engineer & Researcher",
+  "url": "https://preciousani.github.io",
+  "sameAs": [
+    "https://linkedin.com/in/pfemisani",
+    "https://github.com/DroidPrezzo",
+    "https://poluwafemisani.medium.com",
+    "https://youtube.com/@CodewithPrecious",
+    "https://x.com/pfemis"
+  ],
+  "alumniOf": "University of Arkansas at Little Rock"
+}
+</script>
+{% else %}
+{% seo %}
+{% endif %}
+{% feed_meta %}
+
+<!-- Apply saved theme before paint -->
+<script>
+    try {
+        var savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+    } catch (e) {}
+</script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700{% if page.layout == 'post' %}&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400{% endif %}&display=swap" rel="stylesheet">
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ '/css/design-system.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/css/layouts.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/css/components.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/css/effects.css' | relative_url }}">
+{% if page.layout == 'post' or page.is_blog %}
+<link rel="stylesheet" href="{{ '/css/blog.css' | relative_url }}">
+{% endif %}

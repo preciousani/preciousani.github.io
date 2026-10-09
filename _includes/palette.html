@@ -1,0 +1,26 @@
+{%- if page.is_home -%}{%- assign home = '' -%}{%- else -%}{%- assign home = '/' | relative_url -%}{%- endif -%}
+<!-- Command palette (⌘K / Ctrl+K / "/") -->
+<div class="cmdk" id="cmdk" hidden>
+    <div class="cmdk-backdrop" data-cmdk-close></div>
+    <div class="cmdk-panel" role="dialog" aria-modal="true" aria-label="Command menu">
+        <div class="cmdk-search">
+            <span class="prompt" aria-hidden="true">&gt;</span>
+            <input id="cmdk-input" type="text" placeholder="Type a command or search…" autocomplete="off" spellcheck="false"
+                role="combobox" aria-expanded="true" aria-controls="cmdk-list" aria-autocomplete="list">
+            <kbd>esc</kbd>
+        </div>
+        <ul class="cmdk-list" id="cmdk-list" role="listbox"></ul>
+        <div class="cmdk-foot"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>↵</kbd> select</span></div>
+    </div>
+</div>
+<script id="cmdk-data" type="application/json">
+{
+  "home": {{ home | append: '#' | jsonify }},
+  "blog": {{ '/blog/' | relative_url | jsonify }},
+  "feed": {{ '/feed.xml' | relative_url | jsonify }},
+  "email": {{ site.email | jsonify }},
+  "posts": [{% for post in site.posts %}
+    { "title": {{ post.title | jsonify }}, "url": {{ post.url | relative_url | jsonify }}, "date": {{ post.date | date: '%b %Y' | jsonify }} }{% unless forloop.last %},{% endunless %}{% endfor %}
+  ]
+}
+</script>

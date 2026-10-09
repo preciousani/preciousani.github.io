@@ -1,0 +1,38 @@
+# Optional: Pages CMS (https://pagescms.org) — a free web editor for this repo.
+# Sign in there with GitHub, open this repository, and write posts in a rich-text editor.
+media:
+  input: assets/images/blog
+  output: /assets/images/blog
+
+content:
+  - name: posts
+    label: Blog posts
+    type: collection
+    path: _posts
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [title, date]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: date
+        label: Publish date
+        type: date
+      - name: description
+        label: Summary
+        type: text
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+      - name: image
+        label: Cover image
+        type: image
+      - name: canonical_url
+        label: Canonical URL (only if first published elsewhere)
+        type: string
+      - name: body
+        label: Body
+        type: rich-text

@@ -1,0 +1,91 @@
+---
+layout: default
+---
+<div class="reading-progress" aria-hidden="true"><span></span></div>
+
+<article class="post" itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="post-header">
+        <div class="container">
+            <a class="back-link" href="{{ '/blog/' | relative_url }}">← cd ../blog</a>
+            {% if page.tags.size > 0 %}
+            <div class="chips post-tags">
+                {% for tag in page.tags limit: 4 %}<a class="chip chip-primary" href="{{ '/blog/' | relative_url }}?tag={{ tag | uri_escape }}">#{{ tag }}</a>{% endfor %}
+            </div>
+            {% endif %}
+            <h1 class="post-title" itemprop="headline">{{ page.title }}</h1>
+            {%- assign dek_probe = page.description | remove: '…' | truncate: 18, '' -%}
+            {% if page.description %}{% unless content contains dek_probe %}<p class="post-dek">{{ page.description }}</p>{% endunless %}{% endif %}
+            <div class="post-meta">
+                <span class="post-author">
+                    <img src="{{ '/assets/images/headshot.jpg' | relative_url }}" alt="" width="28" height="28">
+                    <span itemprop="author">{{ site.author.name }}</span>
+                </span>
+                <span aria-hidden="true">·</span>
+                <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: '%B %-d, %Y' }}</time>
+                <span aria-hidden="true">·</span>
+                <span>{% include reading-time.html content=content %}</span>
+                {% if page.medium_url %}
+                <span aria-hidden="true">·</span>
+                <a href="{{ page.medium_url }}" target="_blank" rel="noopener noreferrer">also on Medium ↗</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <div class="post-layout">
+        <aside class="post-toc" aria-label="On this page">
+            <div class="post-toc-inner">
+                <p class="eyebrow">// on this page</p>
+                <nav id="toc"></nav>
+            </div>
+        </aside>
+
+        <div class="prose" itemprop="articleBody">
+            {{ content }}
+        </div>
+
+        <aside class="post-aside">
+            <div class="post-aside-inner">
+                <div class="author-card">
+                    <img src="{{ '/assets/images/headshot.jpg' | relative_url }}" alt="Precious Oluwafemi Sani" loading="lazy">
+                    <div>
+                        <p class="author-name">{{ site.author.name }}</p>
+                        <p class="author-role">AI Security Engineer</p>
+                    </div>
+                    <p class="author-bio">I red-team LLMs, build guardrails, and research cross-lingual safety gaps.</p>
+                </div>
+                <div class="share">
+                    <p class="eyebrow">// share</p>
+                    <a href="https://x.com/intent/post?text={{ page.title | uri_escape }}&amp;url={{ page.url | absolute_url | uri_escape }}" target="_blank" rel="noopener noreferrer">X / Twitter ↗</a>
+                    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ page.url | absolute_url | uri_escape }}" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+                    <button type="button" class="link-button" data-copy-link>Copy link</button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <footer class="post-footer container">
+        <div class="author-card author-card-wide">
+            <img src="{{ '/assets/images/headshot.jpg' | relative_url }}" alt="" loading="lazy">
+            <div>
+                <p class="author-name">Written by {{ site.author.name }}</p>
+                <p class="author-bio">AI Security Engineer. I red-team LLMs, build guardrails, and research cross-lingual safety gaps. <a href="{{ '/' | relative_url }}#contact">Get in touch →</a></p>
+            </div>
+        </div>
+
+        <nav class="post-nav" aria-label="More posts">
+            {% if page.previous %}
+            <a class="card post-nav-link" href="{{ page.previous.url | relative_url }}">
+                <span class="eyebrow">← older</span>
+                <span class="post-nav-title">{{ page.previous.title }}</span>
+            </a>
+            {% else %}<span></span>{% endif %}
+            {% if page.next %}
+            <a class="card post-nav-link post-nav-next" href="{{ page.next.url | relative_url }}">
+                <span class="eyebrow">newer →</span>
+                <span class="post-nav-title">{{ page.next.title }}</span>
+            </a>
+            {% endif %}
+        </nav>
+    </footer>
+</article>

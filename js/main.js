@@ -1,44 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            if (targetId === '#') return;
-            
-            const targetElement = document.querySelector(targetId);
-            if (targetElement) {
-                // Offset for fixed header
-                const headerHeight = document.querySelector('.site-header').offsetHeight;
-                const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Add scroll class to header for styling
     const header = document.querySelector('.site-header');
-    const updateHeader = () => header.classList.toggle('scrolled', window.scrollY > 20);
-    window.addEventListener('scroll', updateHeader, { passive: true });
-    updateHeader();
+    const root = document.documentElement;
+
+    // Header style + scroll progress (top bar and rail)
+    const railProgressText = document.getElementById('rail-progress-text');
+    const onScroll = () => {
+        header.classList.toggle('scrolled', window.scrollY > 20);
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+        root.style.setProperty('--progress', progress.toFixed(4));
+        if (railProgressText) railProgressText.textContent = `${Math.round(progress * 100)}%`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
 
     // Light / dark theme toggle (dark is the default)
+    window.toggleTheme = () => {
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        document.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+    };
     const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            const root = document.documentElement;
-            const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            root.setAttribute('data-theme', next);
-            try { localStorage.setItem('theme', next); } catch (e) {}
-        });
+    if (themeToggle) themeToggle.addEventListener('click', window.toggleTheme);
+
+    // Mobile hamburger menu
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    const setMenu = (open) => {
+        hamburger.classList.toggle('active', open);
+        navLinks.classList.toggle('mobile-open', open);
+        header.classList.toggle('menu-open', open);
+        hamburger.setAttribute('aria-expanded', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+    };
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', () => setMenu(!navLinks.classList.contains('mobile-open')));
+        navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
     }
 
-    // Reveal sections as they scroll into view
+    // Reveal elements as they scroll into view
     const revealEls = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
         const revealObserver = new IntersectionObserver((entries) => {
@@ -54,16 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
         revealEls.forEach(el => el.classList.add('visible'));
     }
 
-    // Highlight the nav link for the section in view
-    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
-    if ('IntersectionObserver' in window) {
+    // Highlight nav + rail links for the section in view
+    const sectionLinks = document.querySelectorAll('.nav-links a[href*="#"], .rail-nav a[href^="#"]');
+    const sections = document.querySelectorAll('main section[id]');
+    if ('IntersectionObserver' in window && sections.length) {
         const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (!entry.isIntersecting) return;
-                navAnchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+                const hash = '#' + entry.target.id;
+                sectionLinks.forEach(a => a.classList.toggle('active', a.hash === hash));
             });
-        }, { rootMargin: '-45% 0px -50% 0px' });
-        document.querySelectorAll('main section[id]').forEach(s => sectionObserver.observe(s));
+        }, { rootMargin: '-40% 0px -55% 0px' });
+        sections.forEach(s => sectionObserver.observe(s));
     }
 
     // Cycle through the DCA impact videos
@@ -77,35 +80,57 @@ document.addEventListener('DOMContentLoaded', () => {
             dcaVideo.play();
         });
     }
-    
-    // Mobile hamburger menu toggle
-    const hamburger = document.getElementById('hamburger');
-    const navLinks = document.getElementById('nav-links');
-    
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navLinks.classList.toggle('mobile-open');
-            header.classList.toggle('menu-open');
-            hamburger.setAttribute('aria-expanded', 
-                hamburger.classList.contains('active'));
-            // Prevent body scroll when menu is open
-            document.body.style.overflow = 
-                navLinks.classList.contains('mobile-open') ? 'hidden' : '';
-        });
-        
-        // Close menu when a nav link is clicked
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navLinks.classList.remove('mobile-open');
-                header.classList.remove('menu-open');
-                hamburger.setAttribute('aria-expanded', 'false');
-                document.body.style.overflow = '';
-            });
-        });
+
+    // Copy email / page link helpers
+    const copyText = async (text, el, label) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            el.classList.add('copied');
+            const state = el.querySelector('.copy-state') || el;
+            const prev = state.textContent;
+            state.textContent = label;
+            setTimeout(() => { state.textContent = prev; el.classList.remove('copied'); }, 1800);
+        } catch (e) {
+            window.location.href = text.includes('@') ? `mailto:${text}` : text;
+        }
+    };
+    window.copyText = copyText;
+    document.querySelectorAll('[data-copy-email]').forEach(btn =>
+        btn.addEventListener('click', () => copyText('poluwafemisani@gmail.com', btn, 'copied ✓')));
+    document.querySelectorAll('[data-copy-link]').forEach(btn =>
+        btn.addEventListener('click', () => copyText(window.location.href.split('#')[0], btn, 'Link copied ✓')));
+
+    // Dock the Hack the Bot terminal into the console rail on ultra-wide screens
+    const botUnit = document.getElementById('bot-unit');
+    const botHome = document.getElementById('bot-home');
+    const botDock = document.getElementById('bot-dock');
+    const botSection = document.getElementById('hackthebot');
+    const dockQuery = window.matchMedia('(min-width: 2100px)');
+    const isDocked = () => botDock && botUnit && botDock.contains(botUnit);
+    if (botUnit && botHome && botDock) {
+        const placeBot = () => {
+            const target = dockQuery.matches ? botDock : botHome;
+            if (botUnit.parentElement !== target) target.appendChild(botUnit);
+            botSection.classList.toggle('is-docked', dockQuery.matches);
+        };
+        placeBot();
+        dockQuery.addEventListener('change', placeBot);
     }
-    
+    window.focusBot = () => {
+        const input = document.getElementById('bot-input');
+        if (isDocked()) {
+            botDock.classList.remove('flash');
+            void botDock.offsetWidth;
+            botDock.classList.add('flash');
+            input && input.focus({ preventScroll: true });
+            return true;
+        }
+        return false;
+    };
+    document.querySelectorAll('[data-bot-link]').forEach(link => link.addEventListener('click', (e) => {
+        if (window.focusBot()) e.preventDefault();
+    }));
+
     // ================================================================
     // HACK THE BOT — Jailbreak Simulation Game
     // ================================================================
@@ -193,7 +218,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         botSend.disabled = true;
                         if (botHint) botHint.textContent = `You cracked it in ${attempts} attempt${attempts > 1 ? 's' : ''}. 🏆`;
                         
-                        if (typeof confetti === 'function') confetti({ particleCount: 120, spread: 70, origin: { y: 0.9 }, colors: ['#56d364', '#79c0ff', '#f0883e'] });
+                        if (typeof confetti === 'function') {
+                            const r = botLog.getBoundingClientRect();
+                            confetti({
+                                particleCount: 120, spread: 70,
+                                origin: { x: (r.left + r.width / 2) / window.innerWidth, y: Math.min(0.95, r.bottom / window.innerHeight) },
+                                colors: ['#56d364', '#79c0ff', '#f0883e']
+                            });
+                        }
                     }, 600);
                 } else {
                     // Normal refusal

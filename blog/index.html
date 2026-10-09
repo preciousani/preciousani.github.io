@@ -1,0 +1,66 @@
+---
+layout: default
+title: Writing
+description: Essays and research notes on AI security, LLM red-teaming, AI safety and governance by Precious Oluwafemi Sani.
+is_blog: true
+---
+<section class="blog-hero">
+    <div class="container">
+        <div class="eyebrow"><span class="idx">~/</span> blog</div>
+        <h1 class="blog-title" data-scramble>Writing</h1>
+        <p class="blog-lede">Field notes on breaking and defending AI systems — red-teaming, safety research, governance, and the occasional tutorial.</p>
+        <div class="blog-tools">
+            <label class="blog-search">
+                <span class="prompt" aria-hidden="true">&gt;</span>
+                <input type="search" id="post-filter" placeholder="grep posts…" aria-label="Filter posts">
+            </label>
+            <a class="btn btn-outline btn-sm" href="{{ '/feed.xml' | relative_url }}">RSS feed</a>
+        </div>
+        {%- assign all_tags = "" | split: "" -%}
+        {%- for post in site.posts -%}{%- assign all_tags = all_tags | concat: post.tags -%}{%- endfor -%}
+        {%- assign all_tags = all_tags | uniq | sort -%}
+        <div class="chips tag-filter" role="group" aria-label="Filter by tag">
+            <button type="button" class="chip is-active" data-tag="">all</button>
+            {% for tag in all_tags %}<button type="button" class="chip" data-tag="{{ tag }}">#{{ tag }}</button>{% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="blog-list-section">
+    <div class="container">
+        {% assign latest = site.posts.first %}
+        {% if latest %}
+        <a class="card post-feature reveal" href="{{ latest.url | relative_url }}" data-post data-tags="{{ latest.tags | join: ' ' }}" data-title="{{ latest.title | downcase | escape }}">
+            {% if latest.image %}<div class="post-feature-media"><img src="{{ latest.image | relative_url }}" alt="" loading="lazy"></div>{% endif %}
+            <div class="post-feature-body">
+                <span class="eyebrow">latest · {{ latest.date | date: '%b %-d, %Y' }}</span>
+                <h2>{{ latest.title }}</h2>
+                <p>{{ latest.description }}</p>
+                <span class="card-link">Read post →</span>
+            </div>
+        </a>
+        {% endif %}
+
+        {% assign by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+        {% for year in by_year %}
+        <div class="year-group" data-year-group>
+            <h2 class="year-label">{{ year.name }}</h2>
+            <ul class="post-list">
+                {% for post in year.items %}
+                <li data-post data-tags="{{ post.tags | join: ' ' }}" data-title="{{ post.title | downcase | escape }}">
+                    <a href="{{ post.url | relative_url }}" class="post-row">
+                        <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %d' }}</time>
+                        <span class="post-row-main">
+                            <span class="post-row-title">{{ post.title }}</span>
+                            <span class="post-row-desc">{{ post.description }}</span>
+                        </span>
+                        <span class="post-row-meta">{% include reading-time.html content=post.content %}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+        <p class="empty-state" id="post-empty" hidden>No posts match that filter. <button type="button" class="link-button" data-clear-filter>Clear filter</button></p>
+    </div>
+</section>

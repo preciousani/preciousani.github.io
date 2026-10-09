@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% include head.html %}
+</head>
+<body{% if page.body_class %} class="{{ page.body_class }}"{% endif %}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <canvas id="ambient" class="ambient" aria-hidden="true"></canvas>
+    <div class="spotlight" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    {% include header.html %}
+
+    <main id="main">
+        {{ content }}
+    </main>
+
+    {% include footer.html %}
+    {% include palette.html %}
+
+    {% if page.is_home %}
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+    {% endif %}
+    <script src="{{ '/js/main.js' | relative_url }}" defer></script>
+    <script src="{{ '/js/effects.js' | relative_url }}" defer></script>
+    <script src="{{ '/js/palette.js' | relative_url }}" defer></script>
+    {% if page.layout == 'post' or page.is_blog %}
+    <script src="{{ '/js/blog.js' | relative_url }}" defer></script>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,62 @@
+# Site settings — GitHub Pages builds this with Jekyll automatically on push.
+title: Precious Oluwafemi Sani
+tagline: AI Security Engineer
+description: >-
+  AI Security Engineer and researcher. I red-team LLMs, build guardrails, and
+  research cross-lingual safety gaps.
+url: https://preciousani.github.io
+baseurl: ""
+lang: en_US
+logo: /assets/images/headshot.jpg
+image: /assets/images/headshot.jpg
+email: poluwafemisani@gmail.com
+
+author:
+  name: Precious Oluwafemi Sani
+  twitter: pfemis
+  url: https://preciousani.github.io
+
+twitter:
+  username: pfemis
+  card: summary_large_image
+
+social:
+  name: Precious Oluwafemi Sani
+  links:
+    - https://github.com/DroidPrezzo
+    - https://linkedin.com/in/pfemisani
+    - https://poluwafemisani.medium.com
+    - https://youtube.com/@CodewithPrecious
+    - https://x.com/pfemis
+
+# Blog
+permalink: /blog/:title/
+words_per_minute: 220
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+feed:
+  path: feed.xml
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
